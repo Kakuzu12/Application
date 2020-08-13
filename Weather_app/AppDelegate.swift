@@ -35,6 +35,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data stack
 
+  /*  func getContext() -> NSManagedObjectContext {
+        return AppDelegate.persistentContainer.viewContext
+    } */
+    
+    private var converter: WeatherModelConverterInput!
+
+    
+   /* init(converter: WeatherModelConverterInput) {
+        self.converter = converter
+    } */
+
+    
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
@@ -77,6 +89,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
+    func saveWeatherEntity(model: WeatherModel) {
+        converter = WeatherModelConverter()
+        converter.convert(weatherModel: model){ (WeatherEntity) -> WeatherEntity in
+            let entity = WeatherEntity
+            self.saveContext()
+            self.saveDetailedWeatherEntity(model: model.weather[0], weatherEntity: entity)
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+            
+            let entityDescription = NSEntityDescription.entity(forEntityName: "WeatherEntity", in: self.persistentContainer.viewContext)
+                 
+            fetchRequest.entity = entityDescription
+                 
+            do {
+                let result = try
+                    self.persistentContainer.viewContext.fetch(fetchRequest)
+                for data in result as! [NSManagedObject] {
+                        print(data.value(forKey: "country") as! String)
+                }
+                     
+          } catch {
+                let fetchError = error as NSError
+                print(fetchError)
+                }
+            return entity
+        }
+    
+    }
+    func saveDetailedWeatherEntity(model: Weather, weatherEntity: WeatherEntity) {
+        converter = WeatherModelConverter()
+        converter.convertWeather(weatherModel: model){ (DetailedWeatherEntity) -> DetailedWeatherEntity in
+            let entity = DetailedWeatherEntity
+            entity.weatherRelation = weatherEntity
+            print("There is a connection \(String(describing: entity.weatherRelation?.name))")
+            self.saveContext()
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+            
+            let entityDescription = NSEntityDescription.entity(forEntityName: "DetailedWeatherEntity", in: self.persistentContainer.viewContext)
+                 
+            fetchRequest.entity = entityDescription
+                 
+            do {
+                let result = try
+                    self.persistentContainer.viewContext.fetch(fetchRequest)
+                for data in result as! [NSManagedObject] {
+                        print(data.value(forKey: "definition") as! String)
+                }
+                     
+          } catch {
+                let fetchError = error as NSError
+                print(fetchError)
+                }
+            return entity
+        }
+        
+    }
+   
 }
 

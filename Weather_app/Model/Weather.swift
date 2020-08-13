@@ -9,7 +9,7 @@
 import UIKit
 
 struct Weather: Codable {
-    let id: Int
+    let id: Float
     let main: String
     let description: String
     let icon: String
@@ -26,8 +26,8 @@ struct Main: Codable {
 
 struct Sys: Codable {
     let country: String?
-    let sunrise: Int?
-    let sunset: Int?
+    let sunrise: Float?
+    let sunset: Float?
 }
 
 struct WeatherModel: Codable {
@@ -35,8 +35,8 @@ struct WeatherModel: Codable {
     let main: Main
     let sys: Sys
     let name: String?
-    let dt: Int
-    let timezone: Int?
+    let dt: Float
+    let timezone: Float?
     let dt_txt: String?
 }
 
