@@ -40,7 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     } */
     
     private var converter: WeatherModelConverterInput!
-
     
    /* init(converter: WeatherModelConverterInput) {
         self.converter = converter
@@ -92,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func saveWeatherEntity(model: WeatherModel) {
         converter = WeatherModelConverter()
-        converter.convert(weatherModel: model){ (WeatherEntity) -> WeatherEntity in
+        converter.convert(weatherModel: model){ (WeatherEntity) -> () in
             let entity = WeatherEntity
             self.saveContext()
             self.saveDetailedWeatherEntity(model: model.weather[0], weatherEntity: entity)
@@ -112,18 +111,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      
           } catch {
                 let fetchError = error as NSError
+            
                 print(fetchError)
                 }
-            return entity
+            
         }
     
     }
     func saveDetailedWeatherEntity(model: Weather, weatherEntity: WeatherEntity) {
         converter = WeatherModelConverter()
-        converter.convertWeather(weatherModel: model){ (DetailedWeatherEntity) -> DetailedWeatherEntity in
+        converter.convertWeather(weatherModel: model){ (DetailedWeatherEntity) -> () in
             let entity = DetailedWeatherEntity
             entity.weatherRelation = weatherEntity
-            print("There is a connection \(String(describing: entity.weatherRelation?.name))")
             self.saveContext()
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
@@ -142,7 +141,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let fetchError = error as NSError
                 print(fetchError)
                 }
-            return entity
         }
         
     }

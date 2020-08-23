@@ -13,11 +13,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     let networkManager = WeatherNetworkManager()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var sampleVariable: WeatherModel?
     
     let currentLocation: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "...Location"
+        label.text = "Location"
         label.textAlignment = .left
         label.textColor = .label
         label.numberOfLines = 0
@@ -28,7 +29,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     let currentTime: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "28 March 2020"
+        label.text = "Date"
         label.textAlignment = .left
         label.textColor = .label
         label.font = UIFont.systemFont(ofSize: 10, weight: .heavy)
@@ -89,13 +90,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var stackView : UIStackView!
     var latitude : CLLocationDegrees!
     var longitude: CLLocationDegrees!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemBackground
+        view.accessibilityIdentifier = "ViewController"
         
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(image: UIImage(systemName: "plus.circle"), style: .done, target: self, action: #selector(handleAddPlaceButton)), UIBarButtonItem(image: UIImage(systemName: "thermometer"), style: .done, target: self, action: #selector(handleShowForecast)),UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(handleRefresh))]
+        self.navigationItem.rightBarButtonItems = [createBarItems()[0], createBarItems()[1],createBarItems()[2]]
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -106,6 +107,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         setupViews()
         layoutViews()
+    }
+    
+    func createBarItems() -> [UIBarButtonItem] {
+        let plusCircleButton = UIBarButtonItem(image: UIImage(systemName: "plus.circle"), style: .done, target: self, action: #selector(handleAddPlaceButton))
+        plusCircleButton.accessibilityIdentifier = "plusCircleButton"
+        let thermometerButton = UIBarButtonItem(image: UIImage(systemName: "thermometer"), style: .done, target: self, action: #selector(handleShowForecast))
+        thermometerButton.accessibilityIdentifier = "thermometerButton"
+        let arrowButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(handleRefresh))
+        arrowButton.accessibilityIdentifier = "arrowButton"
+        return [plusCircleButton,thermometerButton,arrowButton]
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -123,6 +134,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func loadData(city: String) {
         networkManager.fetchCurrentWeather(city: city) { (weather) in
             self.appDelegate.saveWeatherEntity(model: weather)
+            self.sampleVariable = weather
             print("Current Temperature", weather.main.temp.kelvinToCeliusConverter())
             let formatter = DateFormatter()
             formatter.dateFormat = "dd MMM yyyy" //yyyy
@@ -212,9 +224,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     //MARK: - Handlers
     @objc func handleAddPlaceButton() {
-        let alertController = UIAlertController(title: "Add City", message: "", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Add City", message: "Write down your city", preferredStyle: .alert)
+        alertController.view.accessibilityIdentifier = "alert"
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "City Name"
+            textField.accessibilityIdentifier = "textField"
         }
         let saveAction = UIAlertAction(title: "Add", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
@@ -226,10 +240,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             print("Cancel")
         })
         
-        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
-        
+
         self.present(alertController, animated: true, completion: nil)
     }
     

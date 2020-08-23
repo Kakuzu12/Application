@@ -9,13 +9,13 @@
 import UIKit
 
 let imageCache = NSCache<AnyObject, AnyObject>()
-let cachedImages = NSCache<NSString, UIImage>()
+let cachedImages = NSCache<NSString, UIImage>() //картинки помещаем в кэш для оптимизации работы приложения
 
 extension UIImageView {
     func loadImageFromURL(url: String) {
         self.image = nil
         guard let URL = URL(string: url) else {
-            print("No Image For this url", url)
+            print("No Image for this url", url)
             return
         }
         

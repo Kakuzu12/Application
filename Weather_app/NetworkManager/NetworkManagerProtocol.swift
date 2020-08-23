@@ -8,9 +8,10 @@
 
 import UIKit
 
- protocol NetworkManagerProtocol {
-     func fetchCurrentWeather(city: String, completion: @escaping (WeatherModel) -> ())
-     func fetchCurrentLocationWeather(lat: String, lon: String, completion: @escaping (WeatherModel) -> ())
-     func fetchNextFiveWeatherForecast(city: String, completion: @escaping ([ForecastTemperature]) -> ())
- }
+protocol NetworkManagerProtocol {
+    var successIndex: Bool { get set }
+    func fetchCurrentWeather(city: String, completion: @escaping (WeatherModel) -> ())
+    func fetchCurrentLocationWeather(lat: String, lon: String, completion: @escaping (WeatherModel) -> ())
+    func fetchNextFiveWeatherForecast(city: String, completion: @escaping ([ForecastTemperature]) -> ())
+}
  

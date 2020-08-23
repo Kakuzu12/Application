@@ -13,6 +13,6 @@ extension Int {
         let incrementedVal = self + num
         let mod = incrementedVal % 7
         
-        return mod
+        return mod  // увеличиваем текущее значение дня на num
     }
 }

@@ -10,17 +10,18 @@ import UIKit
 import CoreData
 
 protocol WeatherModelConverterInput {
-    func convert(weatherModel: WeatherModel,completion: @escaping ((WeatherEntity) -> WeatherEntity))
-    func convertWeather(weatherModel: Weather,completion: @escaping ((DetailedWeatherEntity) -> DetailedWeatherEntity))
+    func convert(weatherModel: WeatherModel,completion: @escaping ((WeatherEntity) -> ()))
+    func convertWeather(weatherModel: Weather,completion: @escaping ((DetailedWeatherEntity) -> ()))
 }
 
 public class WeatherModelConverter {
     var appDelegate: AppDelegate!
+    var successIndex: Bool = true
 }
 
 extension WeatherModelConverter: WeatherModelConverterInput {
     
-    func convert(weatherModel: WeatherModel,completion: @escaping ((WeatherEntity) -> WeatherEntity)) {
+    func convert(weatherModel: WeatherModel,completion: @escaping ((WeatherEntity) -> ())) {
         DispatchQueue.main.async{
             self.appDelegate = UIApplication.shared.delegate as? AppDelegate
             let entity = WeatherEntity.init(entity: NSEntityDescription.entity(forEntityName: "WeatherEntity", in:self.appDelegate.persistentContainer.viewContext)!, insertInto:self.appDelegate.persistentContainer.viewContext)
@@ -41,7 +42,7 @@ extension WeatherModelConverter: WeatherModelConverterInput {
         }
         
     }
-    func convertWeather(weatherModel: Weather,completion: @escaping ((DetailedWeatherEntity) -> DetailedWeatherEntity)) {
+    func convertWeather(weatherModel: Weather,completion: @escaping ((DetailedWeatherEntity) -> ())) {
         DispatchQueue.main.async{
             self.appDelegate = UIApplication.shared.delegate as? AppDelegate
             let entity = DetailedWeatherEntity.init(entity: NSEntityDescription.entity(forEntityName: "DetailedWeatherEntity", in:self.appDelegate.persistentContainer.viewContext)!, insertInto:self.appDelegate.persistentContainer.viewContext)

@@ -19,7 +19,7 @@ class ForecastViewController : UIViewController, UICollectionViewDataSource, UIC
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         self.title = "Forecast"
-        
+        view.accessibilityIdentifier = "ForecastViewController"
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         collectionView.register(ForecastCell.self, forCellWithReuseIdentifier: ForecastCell.reuseIdentifier)
@@ -33,7 +33,6 @@ class ForecastViewController : UIViewController, UICollectionViewDataSource, UIC
         print("City Forecast:", city)
         networkManager.fetchNextFiveWeatherForecast(city: city) { (forecast) in
             self.forecastData = forecast
-            print("Total Count:", forecast.count)
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
@@ -85,7 +84,6 @@ class ForecastViewController : UIViewController, UICollectionViewDataSource, UIC
        let layoutGroup = NSCollectionLayoutGroup.vertical(layoutSize: layoutGroupSize, subitems: [layoutItem])
 
        let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
-      // layoutSection.orthogonalScrollingBehavior = .groupPagingCentered
        return layoutSection
 }
 }
