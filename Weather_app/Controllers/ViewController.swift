@@ -9,11 +9,12 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController {
     
     let networkManager = WeatherNetworkManager()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var sampleVariable: WeatherModel?
+    var deletionCheck: [Any] = ["",true]
     
     let currentLocation: UILabel = {
         let label = UILabel()
@@ -44,6 +45,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 60, weight: .heavy)
         return label
+    }()
+    
+    let deleteButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Delete", for: .normal)
+        button.contentHorizontalAlignment = .center
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+        button.layer.borderWidth = 2.0
+        button.addTarget(self, action: #selector(backwardTransition), for: .touchUpInside)
+        button.backgroundColor = .red
+        return button
     }()
     
     let tempDescription: UILabel = {
@@ -85,23 +99,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return label
     }()
     
-    var locationManager = CLLocationManager()
     var currentLoc: CLLocation?
     var stackView : UIStackView!
-    var latitude : CLLocationDegrees!
-    var longitude: CLLocationDegrees!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemBackground
         view.accessibilityIdentifier = "ViewController"
         
-        self.navigationItem.rightBarButtonItems = [createBarItems()[0], createBarItems()[1],createBarItems()[2]]
-        
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        self.navigationItem.rightBarButtonItems = [createBarItems()[0], createBarItems()[1]]
         
         transparentNavigationBar()
         
@@ -110,32 +116,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func createBarItems() -> [UIBarButtonItem] {
-        let plusCircleButton = UIBarButtonItem(image: UIImage(systemName: "plus.circle"), style: .done, target: self, action: #selector(handleAddPlaceButton))
-        plusCircleButton.accessibilityIdentifier = "plusCircleButton"
         let thermometerButton = UIBarButtonItem(image: UIImage(systemName: "thermometer"), style: .done, target: self, action: #selector(handleShowForecast))
         thermometerButton.accessibilityIdentifier = "thermometerButton"
         let arrowButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(handleRefresh))
         arrowButton.accessibilityIdentifier = "arrowButton"
-        return [plusCircleButton,thermometerButton,arrowButton]
+        return [thermometerButton,arrowButton]
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        manager.stopUpdatingLocation()
-        manager.delegate = nil
-        let location = locations[0].coordinate
-        latitude = location.latitude
-        longitude = location.longitude
-        print("Long", longitude.description)
-        print("Lat", latitude.description)
-        loadDataUsingCoordinates(lat: latitude.description, lon: longitude.description)
-    }
-    
     
     func loadData(city: String) {
         networkManager.fetchCurrentWeather(city: city) { (weather) in
             self.appDelegate.saveWeatherEntity(model: weather)
             self.sampleVariable = weather
-            print("Current Temperature", weather.main.temp.kelvinToCeliusConverter())
+            print("Current Temperature is", weather.main.temp.kelvinToCeliusConverter())
             let formatter = DateFormatter()
             formatter.dateFormat = "dd MMM yyyy" //yyyy
             let stringDate = formatter.string(from: Date(timeIntervalSince1970: TimeInterval(weather.dt)))
@@ -155,7 +147,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func loadDataUsingCoordinates(lat: String, lon: String) {
         networkManager.fetchCurrentLocationWeather(lat: lat, lon: lon) { (weather) in
-            print("Current Temperature", weather.main.temp.kelvinToCeliusConverter())
+            print("Current Temperature was", weather.main.temp.kelvinToCeliusConverter())
             let formatter = DateFormatter()
             formatter.dateFormat = "dd MMM yyyy" //yyyy
             let stringDate = formatter.string(from: Date(timeIntervalSince1970: TimeInterval(weather.dt)))
@@ -174,6 +166,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func setupViews() {
+        view.addSubview(deleteButton)
         view.addSubview(currentLocation)
         view.addSubview(currentTemperatureLabel)
         view.addSubview(tempSymbol)
@@ -184,7 +177,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func layoutViews() {
-        
+        NSLayoutConstraint.activate([
+            deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            deleteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 120),
+            deleteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -90)
+        ])
         currentLocation.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         currentLocation.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18).isActive = true
         currentLocation.heightAnchor.constraint(equalToConstant: 70).isActive = true
@@ -223,27 +220,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     //MARK: - Handlers
-    @objc func handleAddPlaceButton() {
-        let alertController = UIAlertController(title: "Add City", message: "Write down your city", preferredStyle: .alert)
-        alertController.view.accessibilityIdentifier = "alert"
-        alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = "City Name"
-            textField.accessibilityIdentifier = "textField"
-        }
-        let saveAction = UIAlertAction(title: "Add", style: .default, handler: { alert -> Void in
-            let firstTextField = alertController.textFields![0] as UITextField
-            print("City Name: \(String(describing: firstTextField.text))")
-            guard let cityname = firstTextField.text else { return }
-            self.loadData(city: cityname)
-        })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: { (action : UIAlertAction!) -> Void in
-            print("Cancel")
-        })
-        
-        alertController.addAction(saveAction)
-        alertController.addAction(cancelAction)
-
-        self.present(alertController, animated: true, completion: nil)
+    
+    @objc func backwardTransition() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc func handleShowForecast() {

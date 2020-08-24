@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let winScene = (scene as? UIWindowScene) else { return }
 
-        let vc = UINavigationController(rootViewController: WelcomeScreen())
+        let vc = UINavigationController(rootViewController: TableViewAdd())
         window = UIWindow(windowScene: winScene)
         window?.rootViewController = vc
         window?.makeKeyAndVisible()

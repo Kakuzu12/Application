@@ -37,6 +37,8 @@
 		7457DBB424EC0F0800DA3368 /* Climate-Change-and-the-New-Language-of-Weather-800x450.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7457DBB324EC0F0700DA3368 /* Climate-Change-and-the-New-Language-of-Weather-800x450.jpg */; };
 		7457DBE224EE845100DA3368 /* Weather_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 74414D8E24CC878F00D8263E /* Weather_app.xcdatamodeld */; };
 		7457DBE524F0176F00DA3368 /* TransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7457DBE424F0176F00DA3368 /* TransitionDelegate.swift */; };
+		749720E824F3161D005BF6FC /* TableViewAdd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749720E724F3161D005BF6FC /* TableViewAdd.swift */; };
+		749720EA24F34ED1005BF6FC /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749720E924F34ED1005BF6FC /* TableViewCellModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +94,8 @@
 		7457DB7B24E8950B00DA3368 /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		7457DBB324EC0F0700DA3368 /* Climate-Change-and-the-New-Language-of-Weather-800x450.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Climate-Change-and-the-New-Language-of-Weather-800x450.jpg"; sourceTree = "<group>"; };
 		7457DBE424F0176F00DA3368 /* TransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionDelegate.swift; sourceTree = "<group>"; };
+		749720E724F3161D005BF6FC /* TableViewAdd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewAdd.swift; sourceTree = "<group>"; };
+		749720E924F34ED1005BF6FC /* TableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +132,7 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		74383F3324D78B4E005A2619 /* Extensions */ = {
+		74383F3324D78B4E005A2619 /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				74383F3424D78B6F005A2619 /* KelvinToCelciusConverter.swift */,
@@ -137,7 +141,7 @@
 				74383F3A24D796B8005A2619 /* IntExtension.swift */,
 				744024B424E5B35A009B4D8E /* WeatherModelConverter.swift */,
 			);
-			path = Extensions;
+			path = Support;
 			sourceTree = "<group>";
 		};
 		74383F3C24D7984B005A2619 /* Controllers */ = {
@@ -146,6 +150,7 @@
 				7457DB7B24E8950B00DA3368 /* WelcomeScreen.swift */,
 				74414D8924CC878F00D8263E /* ViewController.swift */,
 				74414DA424D0EE9F00D8263E /* ForecastViewController.swift */,
+				749720E724F3161D005BF6FC /* TableViewAdd.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 				74383F3E24D79AD5005A2619 /* ForecastCell.swift */,
 				74383F4024D79B39005A2619 /* SelfConfiguringCell.swift */,
 				74383F4224D79B5F005A2619 /* HourlyCell.swift */,
+				749720E924F34ED1005BF6FC /* TableViewCellModel.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -169,7 +175,7 @@
 			path = Weather_appUITests;
 			sourceTree = "<group>";
 		};
-		744024B324E5B2F8009B4D8E /* Entity */ = {
+		744024B324E5B2F8009B4D8E /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				744024B624E5B3E7009B4D8E /* WeatherEntity+CoreDataClass.swift */,
@@ -177,7 +183,7 @@
 				744024B824E5B3E7009B4D8E /* DetailedWeatherEntity+CoreDataClass.swift */,
 				744024B924E5B3E7009B4D8E /* DetailedWeatherEntity+CoreDataProperties.swift */,
 			);
-			path = Entity;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		74414D7924CC878F00D8263E = {
@@ -204,10 +210,10 @@
 			isa = PBXGroup;
 			children = (
 				7457DBE324F015F600DA3368 /* AnimationManager */,
-				744024B324E5B2F8009B4D8E /* Entity */,
+				744024B324E5B2F8009B4D8E /* Data */,
 				74383F3D24D798CE005A2619 /* Cell */,
 				74383F3C24D7984B005A2619 /* Controllers */,
-				74383F3324D78B4E005A2619 /* Extensions */,
+				74383F3324D78B4E005A2619 /* Support */,
 				74383F2E24D78A73005A2619 /* Model */,
 				74414D9E24CCCCFF00D8263E /* NetworkManager */,
 				74414D8524CC878F00D8263E /* AppDelegate.swift */,
@@ -390,6 +396,7 @@
 				74414D9024CC878F00D8263E /* Weather_app.xcdatamodeld in Sources */,
 				744024BC24E5B3E7009B4D8E /* DetailedWeatherEntity+CoreDataClass.swift in Sources */,
 				74383F3524D78B6F005A2619 /* KelvinToCelciusConverter.swift in Sources */,
+				749720E824F3161D005BF6FC /* TableViewAdd.swift in Sources */,
 				74383F2D24D78A39005A2619 /* NetworkProperties.swift in Sources */,
 				744024BA24E5B3E7009B4D8E /* WeatherEntity+CoreDataClass.swift in Sources */,
 				74414DA524D0EE9F00D8263E /* ForecastViewController.swift in Sources */,
@@ -401,6 +408,7 @@
 				74383F3024D78A88005A2619 /* Weather.swift in Sources */,
 				74414D8624CC878F00D8263E /* AppDelegate.swift in Sources */,
 				74383F4124D79B39005A2619 /* SelfConfiguringCell.swift in Sources */,
+				749720EA24F34ED1005BF6FC /* TableViewCellModel.swift in Sources */,
 				74383F3B24D796B8005A2619 /* IntExtension.swift in Sources */,
 				74383F3F24D79AD5005A2619 /* ForecastCell.swift in Sources */,
 				7457DB7C24E8950B00DA3368 /* WelcomeScreen.swift in Sources */,
